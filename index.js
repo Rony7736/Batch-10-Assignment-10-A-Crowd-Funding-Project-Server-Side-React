@@ -35,7 +35,11 @@ async function run() {
 
       const result = await campaignCollection.insertOne(data)
       res.send(result)
+    })
 
+    app.get("/addcampaign", async(req, res) => {
+      const result = await campaignCollection.find().toArray()
+      res.send(result)
     })
 
     
