@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config() 
+require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express()
@@ -30,26 +30,57 @@ async function run() {
 
     const campaignCollection = client.db('campaignDB').collection('campaign')
 
-    app.post("/addcampaign", async(req, res) => {
+    app.post("/addcampaign", async (req, res) => {
       const data = req.body
 
       const result = await campaignCollection.insertOne(data)
       res.send(result)
     })
 
-    app.get("/addcampaign", async(req, res) => {
+    app.get("/addcampaign", async (req, res) => {
       const result = await campaignCollection.find().toArray()
       res.send(result)
     })
 
-    app.delete("/campaign/:id", async(req, res) => {
+    // delete data
+    app.delete("/campaign/:id", async (req, res) => {
       const id = req.params.id
-      const query = {_id : new ObjectId(id)}
+      const query = { _id: new ObjectId(id) }
       const result = await campaignCollection.deleteOne(query)
       res.send(result)
     })
 
-    
+    // update a single data
+    app.get("/campaign/:id", async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id) }
+      const result = await campaignCollection.findOne(query)
+      res.send(result)
+    })
+
+    app.patch("/campaign/:id", async (req, res) => {
+      const id = req.params.id
+      console.log(req.params);
+      
+      const data = req.body
+      const query = { _id: new ObjectId(id) }
+      const update = {
+        $set: {
+          photo: data?.photo,
+          title: data?.title,
+          campaigntype: data?.campaigntype,
+          description: data?.description,
+          amount: data?.amount,
+          date: data?.date,
+          email: data?.email,
+          name: data?.name,
+        },
+      }
+
+      const result = await campaignCollection.updateOne(query, update)
+      res.send(result)
+    })
+
 
 
 
@@ -68,9 +99,9 @@ run().catch(console.dir);
 
 
 app.get('/', (req, res) => {
-    res.send("Campaign server is running")
+  res.send("Campaign server is running")
 })
 
 app.listen(port, () => {
-    console.log(`Campaign server is running on port: ${port}`)
+  console.log(`Campaign server is running on port: ${port}`)
 })
