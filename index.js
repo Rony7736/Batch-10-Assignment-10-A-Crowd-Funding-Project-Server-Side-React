@@ -29,20 +29,22 @@ async function run() {
     await client.connect();
 
     const campaignCollection = client.db('campaignDB').collection('campaign')
+    const donatedCollection = client.db('campaignDB').collection('donated')
 
+    // campaign post data
     app.post("/addcampaign", async (req, res) => {
       const data = req.body
-
       const result = await campaignCollection.insertOne(data)
       res.send(result)
     })
 
+    // capmaign get data
     app.get("/addcampaign", async (req, res) => {
       const result = await campaignCollection.find().toArray()
       res.send(result)
     })
 
-    // delete data
+    // delete campaign data
     app.delete("/campaign/:id", async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
@@ -50,7 +52,7 @@ async function run() {
       res.send(result)
     })
 
-    // update a single data
+    // campaign update a single data
     app.get("/campaign/:id", async (req, res) => {
       const id = req.params.id
       const query = { _id: new ObjectId(id) }
@@ -61,7 +63,7 @@ async function run() {
     app.patch("/campaign/:id", async (req, res) => {
       const id = req.params.id
       console.log(req.params);
-      
+
       const data = req.body
       const query = { _id: new ObjectId(id) }
       const update = {
@@ -78,6 +80,15 @@ async function run() {
       }
 
       const result = await campaignCollection.updateOne(query, update)
+      res.send(result)
+    })
+
+
+    // Donated Collection
+    app.post("/donated", async (req, res) => {
+      const donated = req.body
+      console.log("new doneted data", donated);
+      const result = await donatedCollection.insertOne(donated)
       res.send(result)
     })
 
