@@ -92,6 +92,12 @@ async function run() {
       res.send(result)
     })
 
+    app.get("/donated", async(req, res) => {
+
+      const result = await donatedCollection.find().toArray()
+      res.send(result)
+    })
+
 
 
 
