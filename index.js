@@ -44,6 +44,22 @@ async function run() {
       res.send(result)
     })
 
+    // my campaign
+    app.post("/mycampaign", async (req, res) => {
+      const {email : mail} = req.body
+      const result = await campaignCollection.find({email : mail}).toArray()
+      res.send(result)
+    })
+
+    // running campaign
+    app.get("/runningCampaign", async(req, res) => {
+      const newDate = new Date()
+      const result = await campaignCollection.find({"date" : {$gt: newDate}}).toArray()
+      console.log(result);
+      res.send(result)
+      
+    })
+
     // delete campaign data
     app.delete("/campaign/:id", async (req, res) => {
       const id = req.params.id
@@ -62,7 +78,7 @@ async function run() {
 
     app.patch("/campaign/:id", async (req, res) => {
       const id = req.params.id
-      console.log(req.params);
+      // console.log(req.params);
 
       const data = req.body
       const query = { _id: new ObjectId(id) }
@@ -87,13 +103,12 @@ async function run() {
     // Donated Collection
     app.post("/donated", async (req, res) => {
       const donated = req.body
-      console.log("new doneted data", donated);
+      // console.log("new doneted data", donated);
       const result = await donatedCollection.insertOne(donated)
       res.send(result)
     })
 
     app.get("/donated", async(req, res) => {
-
       const result = await donatedCollection.find().toArray()
       res.send(result)
     })
