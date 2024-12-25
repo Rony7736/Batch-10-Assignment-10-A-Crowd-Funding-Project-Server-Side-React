@@ -34,6 +34,7 @@ async function run() {
     // campaign post data
     app.post("/addcampaign", async (req, res) => {
       const data = req.body
+      console.log(data)      
       const result = await campaignCollection.insertOne(data)
       res.send(result)
     })
@@ -52,13 +53,13 @@ async function run() {
     })
 
     // running campaign
-    app.get("/runningCampaign", async(req, res) => {
-      const newDate = new Date()
-      const result = await campaignCollection.find({"date" : {$gt: newDate}}).toArray()
-      console.log(result);
-      res.send(result)
+    // app.get("/runningCampaign", async(req, res) => {
+    //   const newDate = new Date()
+    //   const result = await campaignCollection.find({"date" : {$gte: new Date("2023-01-01T00:00:00Z")}}).toArray()
+    //   console.log(result);
+    //   res.send(result)
       
-    })
+    // })
 
     // delete campaign data
     app.delete("/campaign/:id", async (req, res) => {
