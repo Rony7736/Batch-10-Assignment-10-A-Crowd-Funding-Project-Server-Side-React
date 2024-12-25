@@ -110,7 +110,12 @@ async function run() {
     })
 
     app.get("/donated", async(req, res) => {
-      const result = await donatedCollection.find().toArray()
+      const email = req.query.email 
+      const query = {}
+      if(email){
+        query.email = email
+      }
+      const result = await donatedCollection.find(query).toArray()
       res.send(result)
     })
 
