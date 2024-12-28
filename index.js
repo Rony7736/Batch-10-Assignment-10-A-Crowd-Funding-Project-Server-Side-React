@@ -106,7 +106,7 @@ async function run() {
     app.post("/donated", async (req, res) => {
       const donated = req.body
       // console.log(donated)   
-      console.log(new Date(donated.date).toDateString(), new Date().toDateString());
+      // console.log(new Date(donated.date).toDateString(), new Date().toDateString());
       const isDate = isFuture(new Date(donated.date)) 
       
       if(!isDate){
