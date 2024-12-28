@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { isFuture } = require('date-fns');
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -104,7 +105,14 @@ async function run() {
     // Donated Collection
     app.post("/donated", async (req, res) => {
       const donated = req.body
-      // console.log("new doneted data", donated);
+      // console.log(donated)   
+      console.log(new Date(donated.date).toDateString(), new Date().toDateString());
+      const isDate = isFuture(new Date(donated.date)) 
+      
+      if(!isDate){
+        return res.status(410).json({"success" : false})
+      }
+      
       const result = await donatedCollection.insertOne(donated)
       res.send(result)
     })
@@ -131,8 +139,6 @@ async function run() {
   }
 }
 run().catch(console.dir);
-
-
 
 
 
